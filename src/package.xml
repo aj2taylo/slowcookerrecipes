@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>*</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ApexComponent</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>Grocery_Item__c</members>
+        <members>Ingredient__c</members>
+        <members>Recipe__c</members>
+        <members>Shopping_List_Item__c</members>
+        <members>Shopping_List__c</members>
+        <members>Store_Section__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Grocery_Item__c-Grocery Item Layout</members>
+        <members>Ingredient__c-Ingredient Layout</members>
+        <members>Recipe__c-Recipe Layout</members>
+        <members>Shopping_List_Item__c-Shopping List Item Layout</members>
+        <members>Shopping_List__c-Shopping List Layout</members>
+        <members>Store_Section__c-Store Section Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>StaticResource</name>
+    </types>
+    <version>34.0</version>
+</Package>
