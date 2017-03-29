@@ -31,4 +31,16 @@ public with sharing class slowCookerMgmtController {
             return recipeController.addIngredient(recipeId, groceryItemName, storeSectionName);
         }
 
+
+        @RemoteAction 
+        public static List<Ingredient__c> getIngredients(String recipeId) {
+            System.debug('recipeId = ' + recipeId);
+            return groceryUtils.returnRecipeIngredients(recipeId);
+        }
+
+        @RemoteAction 
+        public static Boolean addItem(String groceryItemName, String storeSectionName) {
+            return shoppingListController.addItem(recipeController.getShoppingListId(), groceryItemName, storeSectionName);
+        }
+
 }

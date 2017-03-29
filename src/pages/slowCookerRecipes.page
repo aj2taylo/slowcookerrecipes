@@ -3,6 +3,10 @@
         <title>Slow Cooker Recipes</title>
         <apex:slds /> 
         <apex:stylesheet value="{!URLFOR($Resource.jqueryui1121, '/jquery-ui-1.12.1/jquery-ui.min.css')}" />
+        <style>
+            #recipeInput { display:none; }
+            #recipeIngredients { display:none; }
+        </style>
     </head>
 
 
@@ -12,16 +16,74 @@
           <div class="slds-grid">
             <div class="slds-col slds-has-flexi-truncate">
               <!-- HEADING AREA -->
-                <p class="slds-text-title--caps slds-line-height--reset">Slow Cooker Recipe Management</p>
-                <h1 class="slds-page-header__title slds-truncate" title="My Accounts">My Recipes</h1>
+                <p class="slds-text-title--caps slds-line-height--reset">Slow Cooker Recipes</p>
+                <h1 class="slds-page-header__title slds-truncate" title="My Accounts">Shopping List Management</h1>
               <!-- / HEADING AREA -->
             </div>
           <div class="slds-col slds-no-flex slds-grid slds-align-top">
-            <button class="slds-button slds-button--neutral">New Recipe</button>
+            <button class="slds-button slds-button--neutral" id="newRecipe">New Recipe</button>
+            <button class="slds-button slds-button--neutral" id="allRecipes">All Recipes</button>
             </div>
           </div>
         </div>
         <!-- / PAGE HEADER -->
+
+
+        <!-- Shopping List -->
+        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="shoppingListMain">
+            <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <div class="slds-text-heading--medium">Shopping List</div>
+
+                </div>
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <!-- Shopping List -->
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Grocery Item">Grocery Item</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Section">Section</div>
+                                </th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody  id="shoppingList">
+                        </tbody>
+                    </table>
+                    <!-- /Shopping List -->
+                </div>
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <div class="slds-form--inline">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="shoppingItem">Grocery Item</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="shoppingItem" class="slds-input" placeholder="Ground Meat" />
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="shoppingSection">Section</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="shoppingSection" class="slds-input" placeholder="Meats" />
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element">
+                            <button type="button" class="slds-button slds-button--brand" id="addShoppingItem">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Shopping List -->
+
+
 
 
         <!-- Recipe Input -->
@@ -36,7 +98,7 @@
                             </div>
                         </div>
                         <div class="slds-form-element">
-                            <button type="button" class="slds-button slds-button--brand">Add</button>
+                            <button type="button" class="slds-button slds-button--brand" id="addRecipe">Add</button>
                         </div>
                     </div>
                 </div>
@@ -48,6 +110,11 @@
         <!-- Recipe Ingredient Management -->
         <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="recipeIngredients">
             <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <div class="slds-text-heading--medium" id="recipeTitle"></div>
+
+                </div>
                 <div class="slds-panel__section slds-has-divider--bottom">
 
                     <!-- Recipe List -->
@@ -86,7 +153,8 @@
                         </div>
 
                         <div class="slds-form-element">
-                            <button type="button" class="slds-button slds-button--brand">Add</button>
+                            <button type="button" class="slds-button slds-button--brand" id="addIngredient">Add</button>
+                            <input type="hidden" id="recipeId" value="" />
                         </div>
                     </div>
                 </div>
@@ -97,7 +165,7 @@
 
 
         <!-- Recipe List -->
-        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
+        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="recipes">
             <div class="slds-form--stacked slds-grow slds-scrollable--y">
                 <div class="slds-panel__section slds-has-divider--bottom">
                     <table class="slds-table slds-table--bordered slds-table--cell-buffer">
@@ -125,11 +193,100 @@
         $(document).ready(function() {
             console.log('ready now!');
 
+            loadShoppingList();
             loadRecipes();
+
+            $("#newRecipe").click(function() {
+                $("#recipes").slideUp();
+                $("#recipeInput").show();
+            });
+
+            $("#addRecipe").click(function() {
+                slowCookerMgmtController.createRecipe($("#recipeName").val(), function(result, event) {
+                    console.log(result);
+
+                    loadRecipes();
+                    $("#recipeInput").slideUp();
+                    $("#recipes").show();
+
+                });
+
+            });
+
+            $("#allRecipes").click(function() { 
+                $("#recipeIngredients").slideUp();
+                $("#recipeInput").slideUp();
+                $("#recipes").show();
+            });
+
+            $("#addIngredient").click(function() {
+
+                slowCookerMgmtController.addIngredient($("#recipeId").val(), $("#groceryItemName").val(), $("#storeSection").val(), function(result, event) {
+                    console.log(result);
+
+                    $("#groceryItemName").val("");
+                    $("#storeSection").val("");
+                    loadRecipeIngredients($("#recipeId").val());
+                });
+            });
+
+            $("#addShoppingItem").click(function() {
+
+                slowCookerMgmtController.addItem($("#shoppingItem").val(), $("#shoppingSection").val(), function(result, event) {
+                    console.log(result);
+
+                    $("#shoppingItem").val("");
+                    $("#shoppingSection").val("");
+                    loadShoppingList();
+                });
+            });
+
         });
 
-        function loadRecipes() {
 
+        function loadRecipe(recipeId, recipeName) {
+            $("#recipes").hide();
+            $("#recipeInput").hide();
+            $('#recipeTitle').html(recipeName);
+            $("#recipeId").val(recipeId);
+            loadRecipeIngredients(recipeId);
+        }
+
+
+
+        function loadRecipeIngredients(recipeId) {
+            slowCookerMgmtController.getIngredients(recipeId, function(result, event) {
+                console.log(result);
+                console.log(event);
+
+                $("#ingredientList").empty();
+
+                 for(i=0; i<result.length; i++){
+                    $("#ingredientList").append("<tr><td scope='row' data-label='Ingredient Name' class='ingredient' id='" + result[i].Id + "'>" + result[i].Grocery_Item__r.Name + "</td><td scope='row' data-label='Section Name' class='ingredient' >" + result[i].Grocery_Item__r.Store_Section__r.Name + "</td><td data-label='Edit'><button class='slds-button slds-button--neutral'>Remove</button></td></tr>");
+                 }
+
+                $("#recipeIngredients").show();
+            });
+
+        }
+
+
+        function loadShoppingList() {
+            slowCookerMgmtController.getShoppingList(function(result, event) {
+                console.log(result);
+                console.log(event);
+
+                $("#shoppingList").empty();
+
+                 for(i=0; i<result.length; i++){
+                    $("#shoppingList").append("<tr><td scope='row' data-label='Grocery Item' class='ingredient' id='" + result[i].Id + "'>" + result[i].Grocery_Item__r.Name + "</td><td scope='row' data-label='Section Name' class='ingredient' >" + result[i].Grocery_Item__r.Store_Section__r.Name + "</td><td data-label='Edit'><button class='slds-button slds-button--neutral'>Remove</button></td></tr>");
+                 }
+
+            });
+
+        }
+
+        function loadRecipes() {
             slowCookerMgmtController.getAllRecipes(function(result, event) {
                 console.log(result);
                 console.log(event);
@@ -137,7 +294,7 @@
                 $("#recipeList").empty();
 
                  for(i=0; i<result.length; i++){
-                    $("#recipeList").append("<tr><th scope='row' data-label='Recipe Name' class='recipeName' id='" + result[i].Id + "'>" + result[i].Name + "</th><td data-label='Add'><button class='slds-button slds-button--neutral'>Add to Shopping List</button></td><td data-label='Edit'><button class='slds-button slds-button--neutral'>Edit Recipe</button></td></tr>");
+                    $("#recipeList").append("<tr><th scope='row' data-label='Recipe Name' class='recipeName' id='" + result[i].Id + "'>" + result[i].Name + "</th><td data-label='Add'><button class='slds-button slds-button--neutral'>Add to Shopping List</button></td><td data-label='Edit'><button class='slds-button slds-button--neutral' onClick='loadRecipe(\"" + result[i].Id + "\", \"" + result[i].Name + "\")'>Edit Recipe</button></td></tr>");
                  }
 
             });

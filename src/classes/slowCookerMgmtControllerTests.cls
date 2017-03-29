@@ -58,4 +58,23 @@ private class slowCookerMgmtControllerTests {
         System.assert(slowCookerMgmtController.addIngredient(r.Id, gi.Name, ss.Name));
     }
 
+
+    @isTest static void getIngredientsTest() {
+        Recipe__c r     = [select Id, Name from Recipe__c where Name = 'Recipe'];
+        List<Ingredient__c> iList     = slowCookerMgmtController.getIngredients(r.Id);
+        System.assertEquals(iList.size(), 1);
+    }
+
+
+    @isTest static void itemTest() {
+        Shopping_List__c sl = [select Id from Shopping_List__c where Done__c = false limit 1];
+        Grocery_Item__c gi     = [select Id, Name from Grocery_Item__c where Name = 'Grocery'];
+        Store_Section__c ss     = [select Id, Name from Store_Section__c where Name = 'Store Section'];
+        Recipe__c r     = [select Id, Name from Recipe__c where Name = 'Recipe'];
+
+        System.assert(slowCookerMgmtController.addItem(gi.Name, ss.Name));
+
+    }
+
+
 }
