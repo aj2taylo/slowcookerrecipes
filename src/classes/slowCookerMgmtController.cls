@@ -43,4 +43,8 @@ public with sharing class slowCookerMgmtController {
             return shoppingListController.addItem(recipeController.getShoppingListId(), groceryItemName, storeSectionName);
         }
 
+        @RemoteAction
+        public static Boolean removeItem(String sli) {
+            return shoppingListController.removeItem(sli);            
+        }
 }
