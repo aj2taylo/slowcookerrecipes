@@ -7,69 +7,116 @@
 
 
     <body class="slds-scope">
-        <!-- MASTHEAD -->
-        <p class="slds-text-heading--label slds-m-bottom--small">
-          Using the Lightning Design System in Visualforce
-        </p>
-        <!-- / MASTHEAD -->
-
         <!-- PAGE HEADER -->
         <div class="slds-page-header" role="banner">
           <div class="slds-grid">
             <div class="slds-col slds-has-flexi-truncate">
               <!-- HEADING AREA -->
-                <p class="slds-text-title--caps slds-line-height--reset">Accounts</p>
-                <h1 class="slds-page-header__title slds-truncate" title="My Accounts">Account.Name</h1>
-                <span class="slds-icon_container slds-icon--small slds-icon-standard-account" title="Account Standard Icon">
-                    <img src="{!URLFOR($Asset.SLDS, 'assets/icons/standard/account_60.png')}" alt="Account Standard Icon" />
-                </span>
+                <p class="slds-text-title--caps slds-line-height--reset">Slow Cooker Recipe Management</p>
+                <h1 class="slds-page-header__title slds-truncate" title="My Accounts">My Recipes</h1>
               <!-- / HEADING AREA -->
             </div>
           <div class="slds-col slds-no-flex slds-grid slds-align-top">
-            <button class="slds-button slds-button--neutral">New Account</button>
+            <button class="slds-button slds-button--neutral">New Recipe</button>
             </div>
           </div>
         </div>
         <!-- / PAGE HEADER -->
 
-        <!-- ACCOUNT DETAIL CARD -->
-        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
-          <div class="slds-form--stacked slds-grow slds-scrollable--y">
 
-            <div class="slds-panel__section">
-              <h3 class="slds-text-heading--small slds-m-bottom--medium">Account Detail</h3>
-              <div class="slds-form-element slds-hint-parent slds-has-divider--bottom">
-                <span class="slds-form-element__label">Name</span>
-                <div class="slds-form-element__control">
-                  <span class="slds-form-element__static">Account.Name</span>
+        <!-- Recipe Input -->
+        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="recipeInput">
+            <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                <div class="slds-panel__section slds-has-divider--bottom">
+                    <div class="slds-form--inline">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="recipeName">Recipe Name</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="recipeName" class="slds-input" placeholder="Spaghetti and Meatballs" />
+                            </div>
+                        </div>
+                        <div class="slds-form-element">
+                            <button type="button" class="slds-button slds-button--brand">Add</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="slds-form-element slds-hint-parent slds-has-divider--bottom">
-                <span class="slds-form-element__label">Phone</span>
-                <div class="slds-form-element__control">
-                  <span class="slds-form-element__static">555-555-5555</span>
-                </div>
-              </div>
             </div>
-            <div class="slds-panel__section slds-has-divider--bottom">
-              <div class="slds-media">
-                <div class="slds-media__body">
-                  <div class="slds-button-group slds-m-top--small" role="group">
-                    <button class="slds-button slds-button--neutral slds-grow">Edit</button>
-                    <button class="slds-button slds-button--neutral slds-grow">Save</button>
-                     <button class="slds-button slds-button--neutral slds-grow">New Account</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <!-- / ACCOUNT DETAIL CARD -->
+        <!-- /Recipe Input -->
 
-        <ul id="recipeList">
-        <li>Test 1</li>
-        <li>Test 2</li>
-        </ul>
+
+        <!-- Recipe Ingredient Management -->
+        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="recipeIngredients">
+            <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <!-- Recipe List -->
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Ingredient">Ingredient</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Section">Section</div>
+                                </th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody  id="ingredientList">
+                        </tbody>
+                    </table>
+                    <!-- /Recipe List -->
+                </div>
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <div class="slds-form--inline">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="groceryItemName">Grocery Item</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="groceryItemName" class="slds-input" placeholder="Ground Meat" />
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="storeSection">Section</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="storeSection" class="slds-input" placeholder="Meats" />
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element">
+                            <button type="button" class="slds-button slds-button--brand">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Recipe Ingredient Management -->
+
+
+
+        <!-- Recipe List -->
+        <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
+            <div class="slds-form--stacked slds-grow slds-scrollable--y">
+                <div class="slds-panel__section slds-has-divider--bottom">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Recipe Name">Recipe Name</div>
+                                </th>
+                                <th scope="col">&nbsp;</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody  id="recipeList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /Recipe List -->
     </body>
 
         <apex:includeScript value="{!URLFOR($Resource.jqueryui1121, '/jquery-ui-1.12.1/external/jquery/jquery.js')}"/>
@@ -90,8 +137,9 @@
                 $("#recipeList").empty();
 
                  for(i=0; i<result.length; i++){
-                    $("#recipeList").append("<li class='recipeName' id='" + result[i].Id + "'>" + result[i].Name + "</li>");
+                    $("#recipeList").append("<tr><th scope='row' data-label='Recipe Name' class='recipeName' id='" + result[i].Id + "'>" + result[i].Name + "</th><td data-label='Add'><button class='slds-button slds-button--neutral'>Add to Shopping List</button></td><td data-label='Edit'><button class='slds-button slds-button--neutral'>Edit Recipe</button></td></tr>");
                  }
+
             });
         }
 
