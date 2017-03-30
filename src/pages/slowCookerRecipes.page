@@ -120,26 +120,6 @@
                 </div>
                 <div class="slds-panel__section slds-has-divider--bottom">
 
-                    <!-- Recipe List -->
-                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
-                        <thead>
-                            <tr class="slds-text-title--caps">
-                                <th scope="col">
-                                    <div class="slds-truncate" title="Ingredient">Ingredient</div>
-                                </th>
-                                <th scope="col">
-                                    <div class="slds-truncate" title="Section">Section</div>
-                                </th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody  id="ingredientList">
-                        </tbody>
-                    </table>
-                    <!-- /Recipe List -->
-                </div>
-                <div class="slds-panel__section slds-has-divider--bottom">
-
                     <div class="slds-form--inline">
                         <div class="slds-form-element">
                             <label class="slds-form-element__label" for="groceryItemName">Grocery Item</label>
@@ -160,6 +140,27 @@
                             <input type="hidden" id="recipeId" value="" />
                         </div>
                     </div>
+                </div>
+
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <!-- Recipe List -->
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Ingredient">Ingredient</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Section">Section</div>
+                                </th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody  id="ingredientList">
+                        </tbody>
+                    </table>
+                    <!-- /Recipe List -->
                 </div>
             </div>
         </div>
