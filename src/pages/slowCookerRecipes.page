@@ -213,11 +213,14 @@
 
                     loadRecipes();
 
+                    $("#recipeName").val("");
+
                     $("#shoppingListMain").slideUp();
                     $("#recipeIngredients").slideUp();
                     $("#recipeInput").slideUp();
-                    $("#recipes").show();
+                    $("#recipes").slideUp();
 
+                    loadRecipe(result.Id, result.Name)
                 });
 
             });
@@ -234,8 +237,6 @@
                 mainPage();
             });
 
-
-
             $("#addIngredient").click(function() {
                 slowCookerMgmtController.addIngredient($("#recipeId").val(), $("#groceryItemName").val(), $("#storeSection").val(), function(result, event) {
                     console.log(result);
@@ -246,7 +247,6 @@
                 });
             });
 
-
             $("#addShoppingItem").click(function() {
                 slowCookerMgmtController.addItem($("#shoppingItem").val(), $("#shoppingSection").val(), function(result, event) {
                     console.log(result);
@@ -256,7 +256,6 @@
                     loadShoppingList();
                 });
             });
-
 
 
             $(".groceryItem").autocomplete({
