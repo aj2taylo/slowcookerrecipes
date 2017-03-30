@@ -4,8 +4,7 @@
         <apex:slds /> 
         <apex:stylesheet value="{!URLFOR($Resource.jqueryui1121, '/jquery-ui-1.12.1/jquery-ui.min.css')}" />
         <style>
-            #recipeInput { display:none; }
-            #recipeIngredients { display:none; }
+            #recipeInput, #recipeIngredients, #recipes { display:none; }
         </style>
     </head>
 
@@ -21,8 +20,9 @@
               <!-- / HEADING AREA -->
             </div>
           <div class="slds-col slds-no-flex slds-grid slds-align-top">
-            <button class="slds-button slds-button--neutral" id="newRecipe">New Recipe</button>
+            <button class="slds-button slds-button--neutral" id="mainPage">Shopping List</button>
             <button class="slds-button slds-button--neutral" id="allRecipes">All Recipes</button>
+            <button class="slds-button slds-button--neutral" id="newRecipe">New Recipe</button>
             </div>
           </div>
         </div>
@@ -33,14 +33,17 @@
         <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap" id="shoppingListMain">
             <div class="slds-form--stacked slds-grow slds-scrollable--y">
                 <div class="slds-panel__section slds-has-divider--bottom">
-
                     <div class="slds-text-heading--medium">Shopping List</div>
-
                 </div>
+                <div class="slds-panel__section slds-has-divider--bottom">
+                    <button class="slds-button slds-button--neutral" id="newRecipe" onclick="selectElementContents( document.getElementById('fullShoppingList') );">Copy to Clipboard</button>
+                </div>
+
+
                 <div class="slds-panel__section slds-has-divider--bottom">
 
                     <!-- Shopping List -->
-                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer" id='fullShoppingList'>
                         <thead>
                             <tr class="slds-text-title--caps">
                                 <th scope="col">
@@ -63,14 +66,14 @@
                         <div class="slds-form-element">
                             <label class="slds-form-element__label" for="shoppingItem">Grocery Item</label>
                             <div class="slds-form-element__control">
-                                <input type="text" id="shoppingItem" class="slds-input" placeholder="Ground Meat" />
+                                <input type="text" id="shoppingItem" class="slds-input groceryItem" placeholder="Ground Meat" />
                             </div>
                         </div>
 
                         <div class="slds-form-element">
                             <label class="slds-form-element__label" for="shoppingSection">Section</label>
                             <div class="slds-form-element__control">
-                                <input type="text" id="shoppingSection" class="slds-input" placeholder="Meats" />
+                                <input type="text" id="shoppingSection" class="slds-input storeSection shoppingItemSection" placeholder="Meats" />
                             </div>
                         </div>
 
@@ -141,14 +144,14 @@
                         <div class="slds-form-element">
                             <label class="slds-form-element__label" for="groceryItemName">Grocery Item</label>
                             <div class="slds-form-element__control">
-                                <input type="text" id="groceryItemName" class="slds-input" placeholder="Ground Meat" />
+                                <input type="text" id="groceryItemName" class="slds-input groceryItem" placeholder="Ground Meat" />
                             </div>
                         </div>
 
                         <div class="slds-form-element">
                             <label class="slds-form-element__label" for="storeSection">Section</label>
                             <div class="slds-form-element__control">
-                                <input type="text" id="storeSection" class="slds-input" placeholder="Meats" />
+                                <input type="text" id="storeSection" class="slds-input storeSection groceryItemNameSection" placeholder="Meats" />
                             </div>
                         </div>
 
@@ -198,6 +201,8 @@
 
             $("#newRecipe").click(function() {
                 $("#recipes").slideUp();
+                $("#shoppingListMain").slideUp();
+                $("#recipeIngredients").slideUp();
                 $("#recipeInput").show();
             });
 
@@ -206,6 +211,9 @@
                     console.log(result);
 
                     loadRecipes();
+
+                    $("#shoppingListMain").slideUp();
+                    $("#recipeIngredients").slideUp();
                     $("#recipeInput").slideUp();
                     $("#recipes").show();
 
@@ -214,13 +222,20 @@
             });
 
             $("#allRecipes").click(function() { 
+                $("#shoppingListMain").slideUp();
                 $("#recipeIngredients").slideUp();
                 $("#recipeInput").slideUp();
                 $("#recipes").show();
             });
 
-            $("#addIngredient").click(function() {
 
+            $("#mainPage").click(function() { 
+                mainPage();
+            });
+
+
+
+            $("#addIngredient").click(function() {
                 slowCookerMgmtController.addIngredient($("#recipeId").val(), $("#groceryItemName").val(), $("#storeSection").val(), function(result, event) {
                     console.log(result);
 
@@ -230,8 +245,8 @@
                 });
             });
 
-            $("#addShoppingItem").click(function() {
 
+            $("#addShoppingItem").click(function() {
                 slowCookerMgmtController.addItem($("#shoppingItem").val(), $("#shoppingSection").val(), function(result, event) {
                     console.log(result);
 
@@ -241,7 +256,94 @@
                 });
             });
 
+
+
+            $(".groceryItem").autocomplete({
+                minLength:3,
+                source:function(request, response){
+                    var id          = this.element.attr('id');
+                    console.log('groceryItem: ');
+                    console.log(id);
+                    console.log(request.term);
+                    slowCookerMgmtController.searchItems(request.term, function(result, event){
+                        console.log(result);
+                        proddata = [];
+                        autodata = [];
+                        console.log(result.length);
+                        for(i=0; i<result.length; i++){
+                            console.log('i = ' + i);
+                            console.log(result[i]);
+                            console.log(result[i].Name);
+                            console.log(result[i].Store_Section__r.Name);
+                            proddata[i] = {name: result[i].Name, id: result[i].Name, autoKey: result[i].Name, section: result[i].Store_Section__r.Name };
+                            console.log(proddata[i]);
+                            autodata[i] = proddata[i].autoKey;
+                            console.log(autodata[i]);
+                        }
+                        console.log(autodata);
+                        response(autodata);
+                    });
+                },
+                select: function(event, ui){
+                    var id              = $(this)[0]['id'];
+                    var sectionId       = id + "Section";
+                    console.log('select:');
+                    console.log(id);
+                    console.log(sectionId);
+                    for(i=0; i<proddata.length; i++){
+                        if(proddata[i].autoKey == ui.item.value){
+                            $("."+sectionId).val(proddata[i].section);
+                        }
+                    }
+                }
+            });
+
+
+
+            $(".storeSection").autocomplete({
+                minLength:3,
+                source:function(request, response){
+                    var id          = this.element.attr('id');
+                    console.log('storeSection: ');
+                    console.log(id);
+                    console.log(request.term);
+                    slowCookerMgmtController.searchStoreSections(request.term, function(result, event){
+                        console.log(result);
+                        proddata = [];
+                        autodata = [];
+                        console.log(result.length);
+                        for(i=0; i<result.length; i++){
+                            console.log('i = ' + i);
+                            console.log(result[i]);
+                            proddata[i] = {name: result[i], id: result[i], autoKey: result[i] };
+                            console.log(proddata[i]);
+                            autodata[i] = proddata[i].autoKey;
+                            console.log(autodata[i]);
+                        }
+                        console.log(autodata);
+                        response(autodata);
+                    });
+                },
+                select: function(event, ui){
+                    var id              = $(this)[0]['id'];
+                    console.log('select:');
+                    console.log(id);
+                    for(i=0; i<proddata.length; i++){
+                        if(proddata[i].autoKey == ui.item.value){
+                            $(this).val(proddata[i].name);
+                        }
+                    }
+                }
+            });
         });
+
+
+        function mainPage() {
+            $("#recipeIngredients").slideUp();
+            $("#recipeInput").slideUp();
+            $("#recipes").slideUp();
+            $("#shoppingListMain").show();
+        }
 
 
         function loadRecipe(recipeId, recipeName) {
@@ -262,7 +364,7 @@
                 $("#ingredientList").empty();
 
                  for(i=0; i<result.length; i++){
-                    $("#ingredientList").append("<tr><td scope='row' data-label='Ingredient Name' class='ingredient' id='" + result[i].Id + "'>" + result[i].Grocery_Item__r.Name + "</td><td scope='row' data-label='Section Name' class='ingredient' >" + result[i].Grocery_Item__r.Store_Section__r.Name + "</td><td data-label='Edit'><button class='slds-button slds-button--destructive'>Remove</button></td></tr>");
+                    $("#ingredientList").append("<tr><td scope='row' data-label='Ingredient Name' class='ingredient' id='" + result[i].Id + "'>" + result[i].Grocery_Item__r.Name + "</td><td scope='row' data-label='Section Name' class='ingredient' >" + result[i].Grocery_Item__r.Store_Section__r.Name + "</td><td data-label='Edit'><button class='slds-button slds-button--destructive' onClick='removeIngredient(\"" + result[i].Id + "\")'>Remove</button></td></tr>");
                  }
 
                 $("#recipeIngredients").show();
@@ -307,10 +409,41 @@
         }
 
 
+        function removeIngredient(sli) {
+            slowCookerMgmtController.removeIngredient(sli, function(result, event) {
+                loadRecipeIngredients($("#recipeId").val());
+            });            
+        }
+
+
+
         function addRecipeToShoppingList(recipeId) {
             slowCookerMgmtController.addRecipeToShoppingList(recipeId, function(result, event) {
                 loadShoppingList();
+                mainPage();
             });            
+        }
+
+
+        function selectElementContents(el) {
+            var body = document.body, range, sel;
+            if (document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(el);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(el);
+                    sel.addRange(range);
+                }
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+                range.execCommand("Copy");
+            }
         }
 
     </script>

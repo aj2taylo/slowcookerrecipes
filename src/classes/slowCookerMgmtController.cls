@@ -31,6 +31,11 @@ public with sharing class slowCookerMgmtController {
             return recipeController.addIngredient(recipeId, groceryItemName, storeSectionName);
         }
 
+        @RemoteAction
+        public static Boolean removeIngredient(String itemId) {
+            return recipeController.removeIngredient(itemId);
+        }
+
 
         @RemoteAction 
         public static List<Ingredient__c> getIngredients(String recipeId) {
@@ -47,4 +52,17 @@ public with sharing class slowCookerMgmtController {
         public static Boolean removeItem(String sli) {
             return shoppingListController.removeItem(sli);            
         }
+
+
+        @RemoteAction
+        public static List<String> searchStoreSections(String searchTerm) {
+            return groceryItemAutoComplete.searchStoreSectionNames(searchTerm);
+        }
+
+
+        @RemoteAction
+        public static List<Grocery_Item__c> searchItems(String searchTerm) {
+            return groceryItemAutoComplete.searchGroceryItems(searchTerm);
+        }
+
 }
