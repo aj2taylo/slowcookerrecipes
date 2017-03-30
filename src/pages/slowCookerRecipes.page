@@ -5,6 +5,21 @@
         <apex:stylesheet value="{!URLFOR($Resource.jqueryui1121, '/jquery-ui-1.12.1/jquery-ui.min.css')}" />
         <style>
             #recipeInput, #recipeIngredients, #recipes { display:none; }
+
+            *::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+              color: #b9c0c9 !important; 
+            }
+            *::-moz-placeholder { /* Firefox 19+ */
+              color: #b9c0c9 !important; 
+            }
+            *:-ms-input-placeholder { /* IE 10+ */
+              color: #b9c0c9 !important; 
+            }
+            *:-moz-placeholder { /* Firefox 18- */
+              color: #b9c0c9 !important; 
+            }
+
+  
         </style>
     </head>
 
@@ -39,27 +54,6 @@
                     <button class="slds-button slds-button--neutral" id="newRecipe" onclick="selectElementContents( document.getElementById('fullShoppingList') );">Copy to Clipboard</button>
                 </div>
 
-
-                <div class="slds-panel__section slds-has-divider--bottom">
-
-                    <!-- Shopping List -->
-                    <table class="slds-table slds-table--bordered slds-table--cell-buffer" id='fullShoppingList'>
-                        <thead>
-                            <tr class="slds-text-title--caps">
-                                <th scope="col">
-                                    <div class="slds-truncate" title="Grocery Item">Grocery Item</div>
-                                </th>
-                                <th scope="col">
-                                    <div class="slds-truncate" title="Section">Section</div>
-                                </th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody  id="shoppingList">
-                        </tbody>
-                    </table>
-                    <!-- /Shopping List -->
-                </div>
                 <div class="slds-panel__section slds-has-divider--bottom">
 
                     <div class="slds-form--inline">
@@ -81,6 +75,28 @@
                             <button type="button" class="slds-button slds-button--brand" id="addShoppingItem">Add</button>
                         </div>
                     </div>
+                </div>
+
+
+                <div class="slds-panel__section slds-has-divider--bottom">
+
+                    <!-- Shopping List -->
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer" id='fullShoppingList'>
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Grocery Item">Grocery Item</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Section">Section</div>
+                                </th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody  id="shoppingList">
+                        </tbody>
+                    </table>
+                    <!-- /Shopping List -->
                 </div>
             </div>
         </div>
@@ -259,7 +275,7 @@
 
 
             $(".groceryItem").autocomplete({
-                minLength:3,
+                minLength:2,
                 source:function(request, response){
                     var id          = this.element.attr('id');
                     console.log('groceryItem: ');
@@ -301,7 +317,7 @@
 
 
             $(".storeSection").autocomplete({
-                minLength:3,
+                minLength:2,
                 source:function(request, response){
                     var id          = this.element.attr('id');
                     console.log('storeSection: ');
